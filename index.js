@@ -4,6 +4,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+
 require("dotenv").config();
 const port = process.env.PORT || 8000;
 // middleWare
@@ -80,6 +81,20 @@ async function run() {
         .send({ success: true });
     });
 
+
+    // Assignment get 
+    app.get('/assignments/:id',async(req,res)=>{
+        const id = req.params.id
+        const query = {_id :new ObjectId(id)}
+        const result = await assignmentsCollection.findOne(query)
+        res.send(result)
+    })
+    app.get('/assignments',async(req,res)=>{
+      
+        const result = await assignmentsCollection.find().toArray()
+        res.send(result)
+    })
+    // Assignment post 
     app.post("/assignments", async (req, res) => {
       const user = req.body;
       const result = await assignmentsCollection.insertOne(user);
