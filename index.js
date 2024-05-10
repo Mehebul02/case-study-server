@@ -81,23 +81,40 @@ async function run() {
         .send({ success: true });
     });
 
-
-    // Assignment get 
-    app.get('/assignments/:id',async(req,res)=>{
-        const id = req.params.id
-        const query = {_id :new ObjectId(id)}
-        const result = await assignmentsCollection.findOne(query)
-        res.send(result)
-    })
-    app.get('/assignments',async(req,res)=>{
-      
-        const result = await assignmentsCollection.find().toArray()
-        res.send(result)
-    })
-    // Assignment post 
+    // Assignment spacify data
+    app.get("/assignments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await assignmentsCollection.findOne(query);
+      res.send(result);
+    });
+    // data server site get
+    app.get("/assignments", async (req, res) => {
+      const result = await assignmentsCollection.find().toArray();
+      res.send(result);
+    });
+    // Assignment post
     app.post("/assignments", async (req, res) => {
       const user = req.body;
       const result = await assignmentsCollection.insertOne(user);
+      res.send(result);
+    });
+    // update assignment
+    app.put("/assignments/:id", async (req, res) => {
+      const id = req.params.id;
+      const assignmentData = req.body;
+      const options = { upsert: true };
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          ...assignmentData,
+        },
+      };
+      const result = await assignmentsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
       res.send(result);
     });
 
