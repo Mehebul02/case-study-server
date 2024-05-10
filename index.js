@@ -90,7 +90,10 @@ async function run() {
     });
     // data server site get
     app.get("/assignments", async (req, res) => {
-      const result = await assignmentsCollection.find().toArray();
+      const filter = req.body.filter
+      let query = {}
+      if(filter) query = {difficulty:filter}
+      const result = await assignmentsCollection.find(query).toArray();
       res.send(result);
     });
     // Assignment post
@@ -118,13 +121,14 @@ async function run() {
       res.send(result);
     });
 
-    // delete my job
-    // app.delete("/job/:id",verifyToken, async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await jobsCollection.deleteOne(query);
-    //   res.send(result);
-    // });
+    // delete my assignment
+    app.delete("/assignments/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("Database delete ", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await assignmentsCollection.deleteOne(query);
+      res.send(result);
+    });
     // update data
     // app.put("/job/:id", async (req, res) => {
     //   const id = req.params.id;
