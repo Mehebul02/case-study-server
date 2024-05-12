@@ -103,12 +103,18 @@ async function run() {
       res.send(result);
     });
     // my submit assignment 
-    app.post("/bid", async (req, res) => {
-      const bidData = req.body;
-      // console.log(bidData)
-      const result = await bidsCollection.insertOne(bidData);
-      res.send(result);
-    });
+   app.get('/submits',async(req,res)=>{
+    const query = submitCollection.find()
+    const result = await query.toArray()
+    res.send(result)
+   })
+  //  spacify assignment 
+  app.get('/submits/:id',async(req,res)=>{
+    const id =req.params.id
+    const query = {_id : new ObjectId (id)}
+    const result =await submitCollection.findOne(query)
+    res.send(result)
+  })
     app.post("/submits", async (req, res) => {
       const submitData = req.body;
       // console.log(bidData)
@@ -116,10 +122,10 @@ async function run() {
       res.send(result);
     });
     // my assignment
-    app.get("/assignments/:email", async (req, res) => {
+    app.get("/submits/:email", async (req, res) => {
       const email = req.params.email;
-      const query = { email: email };
-      const result = await assignmentsCollection.find(query).toArray();
+      const query = { email };
+      const result = await submitCollection.find(query).toArray();
       res.send(result);
     });
     // update assignment
@@ -203,5 +209,5 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 app.listen(port, () => {
-  console.log(`SoleSphere Server is running${port}`);
+  console.log(`Case Study Server is running${port}`);
 });
