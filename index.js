@@ -12,7 +12,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    // 'https://solosphere.web.app',
+    // 'https://case-study-b14df.web.app',
   ],
   credentials: true,
   optionSuccessStatus: 200,
@@ -51,7 +51,7 @@ async function run() {
     const assignmentsCollection = client
       .db("assignmentsDB")
       .collection("assignments");
-    // const bidsCollection = client.db("soloSphere").collection("bids");
+    const submitCollection = client.db("assignmentsDB").collection("submits");
 
     // jwt generate
     app.post("/jwt", async (req, res) => {
@@ -90,9 +90,9 @@ async function run() {
     });
     // data server site get
     app.get("/assignments", async (req, res) => {
-      const filter = req.body.filter
-      let query = {}
-      if(filter) query = {difficulty:filter}
+      const filter = req.body.filter;
+      let query = {};
+      if (filter) query = { difficulty: filter };
       const result = await assignmentsCollection.find(query).toArray();
       res.send(result);
     });
@@ -100,6 +100,26 @@ async function run() {
     app.post("/assignments", async (req, res) => {
       const user = req.body;
       const result = await assignmentsCollection.insertOne(user);
+      res.send(result);
+    });
+    // my submit assignment 
+    app.post("/bid", async (req, res) => {
+      const bidData = req.body;
+      // console.log(bidData)
+      const result = await bidsCollection.insertOne(bidData);
+      res.send(result);
+    });
+    app.post("/submits", async (req, res) => {
+      const submitData = req.body;
+      // console.log(bidData)
+      const result = await submitCollection.insertOne(submitData);
+      res.send(result);
+    });
+    // my assignment
+    app.get("/assignments/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await assignmentsCollection.find(query).toArray();
       res.send(result);
     });
     // update assignment
