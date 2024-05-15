@@ -99,19 +99,19 @@ async function run() {
       res.send(result);
     });
     // my submit assignment 
-   app.get('/submits',async(req,res)=>{
+   app.get('/submits',verifyToken, async(req,res)=>{
     const query = submitCollection.find()
     const result = await query.toArray()
     res.send(result)
    })
   //  spacify assignment 
-  app.get('/submits/:id',verifyToken,async(req,res)=>{
+  app.get('/submits/:id',verifyToken, async(req,res)=>{
     const id =req.params.id
     const query = {_id : new ObjectId (id)}
     const result =await submitCollection.findOne(query)
     res.send(result)
   })
-    app.post("/submits",verifyToken, async (req, res) => {
+    app.post("/submits", async (req, res) => {
       const submitData = req.body;
       // console.log(bidData)
       const result = await submitCollection.insertOne(submitData);
