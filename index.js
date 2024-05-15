@@ -10,9 +10,9 @@ const port = process.env.PORT || 8000;
 // middleWare
 const corsOptions = {
   origin: [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    // 'https://case-study-b14df.web.app',
+    // "http://localhost:5173",
+    // "http://localhost:5174",
+    'https://case-study-b14df.web.app',
   ],
   credentials: true,
   optionSuccessStatus: 200,
@@ -99,13 +99,13 @@ async function run() {
       res.send(result);
     });
     // my submit assignment 
-   app.get('/submits',verifyToken, async(req,res)=>{
+   app.get('/submits', async(req,res)=>{
     const query = submitCollection.find()
     const result = await query.toArray()
     res.send(result)
    })
   //  spacify assignment 
-  app.get('/submits/:id',verifyToken, async(req,res)=>{
+  app.get('/submits/:id', async(req,res)=>{
     const id =req.params.id
     const query = {_id : new ObjectId (id)}
     const result =await submitCollection.findOne(query)
@@ -118,7 +118,7 @@ async function run() {
       res.send(result);
     });
     // my assignment
-    app.get("/my-submit/:email",verifyToken,async (req, res) => {
+    app.get("/my-submit/:email",async (req, res) => {
       const tokenEmail = req.user?.email;
       console.log(tokenEmail, "from token");
       const email = req.params.email;
