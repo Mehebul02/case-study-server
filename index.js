@@ -119,16 +119,24 @@ async function run() {
     });
     // my assignment
     app.get("/my-submit/:email",async (req, res) => {
-      const tokenEmail = req.user?.email;
-      console.log(tokenEmail, "from token");
+      // const tokenEmail = req.user?.email;
+      // console.log(tokenEmail, "from token");
       const email = req.params.email;
-      if(tokenEmail === email){
-        return res.status(401).send({ message: "forbidden access" })
-      }
+      // if(tokenEmail === email){
+      //   return res.status(401).send({ message: "forbidden access" })
+      // }
       const query = { email : email };
-      const result = await submitCollection.find(query).toArray();
+      const result = await assignmentsCollection.find(query).toArray();
       res.send(result);
     });
+    app.get('submitss/:status',async(req,res)=>{
+      const status =req.status?.Pending
+      const query ={status :status}
+      const  result=await submitCollection.find(query).toArray()
+      res.send(result)
+
+    
+    })
     // update assignment
     app.put("/assignments/:id", async (req, res) => {
       const id = req.params.id;
